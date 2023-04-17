@@ -1,0 +1,134 @@
+﻿@using Ptoject.ViewModels;
+
+@model List<Questions>
+<style>
+    #demo {
+        border: 2px solid blue;
+        width: fit-content;
+        padding: 10px;
+        border-radius: 8px;
+        margin-left: auto;
+    }
+
+    body {
+        background-color: aqua;
+    }
+
+    label {
+        font-family: cursive;
+    }
+</style>
+
+@{
+    int i = 0;
+
+}
+@if (Model.Any())
+{
+    <p id="demo"></p>
+    <center>
+        <h3>@ViewBag.Subject</h3>
+    </center>
+    @foreach (var item in Model)
+    {
+        <div style="background-color:antiquewhite"><center>@item.Title</center> </div>
+        @foreach (var ans in item.Answers)
+        {
+
+            <input type="radio" onchange="checkAnswer( @ans.Id)" name="check @i" />
+
+            <label id="@ans.Id">@ans.Answer</label>
+            <br />
+
+        }
+
+        ++@i;
+    }
+
+}
+
+
+@section Scripts{
+
+
+    <script>
+
+        window.addEventListener('load', function () {
+
+
+
+        })//end load
+
+
+        function checkAnswer(id) {
+            let data = window.performance.getEntriesByType("navigation")[0].type;
+            var m = document.getElementById(id);
+            var imojiSmile = document.createElement("span")
+            var imojiAngry = document.createElement("span")
+
+            imojiSmile.style.fontSize = "35px"
+            imojiAngry.style.fontSize = "35px"
+            imojiSmile.innerHTML = "&#128512;"
+            imojiAngry.innerHTML = "&#128544;"
+
+
+            $.ajax({
+                type: 'POST',
+                url: '/Exame/CheckAnswer',
+                dataType: "json",
+                data: {
+                    "id": id
+                }, success: function (e) {
+                    if (e.res == "Cancel") {
+                        //m.style.backgroundColor = "#ffabab"
+                        m.append(imojiAngry)
+
+                    } else {
+                        //m.style.backgroundColor = "lightgreen"
+                        m.append(imojiSmile)
+
+
+                    }
+
+                }
+            });
+
+        }
+
+
+        //======================
+        var countDownDate = new Date().getTime();
+        let countdownDater = new Date().setMinutes(new Date().getMinutes() + 20);
+
+        // Update the count down every 1 second
+        var x = setInterval(function () {
+
+            // Get today's date and time
+
+            const countdown = new Date(countdownDater).getTime();
+            var now = new Date().getTime();
+            const difference = (countdown - now) / 1000;
+
+            let minutes = Math.floor((difference % (60 * 60)) / 60);
+            let seconds = Math.floor(difference % 60);
+            // Find the distance between now and the count down date
+            var distance = countDownDate - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            //var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            //var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Output the result in an element with id="demo"
+            document.getElementById("demo").innerHTML = minutes + "m " + " : " + seconds + "s ";
+
+            // If the count down is over, write some text
+            if (difference < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "EXPIRED";
+                window.location.href = "https://localhost:44335/"
+            }
+        }, 1000);
+    </script>
+}

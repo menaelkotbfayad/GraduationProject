@@ -1,0 +1,20 @@
+﻿
+@model List<Questions>
+
+
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Question Name</th>
+            <th>Question Degree</th>
+        </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Title</td>
+            <td>@item.Degree</td>
+        </tr>
+    }
+  
+    </table>

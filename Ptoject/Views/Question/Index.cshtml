@@ -1,0 +1,13 @@
+﻿@using Ptoject.ViewModels;
+
+@model List<QuestionViewModel>
+
+
+    <ul>
+    @foreach (var item in ViewBag.Subjects)
+    {
+        <li><a asp-action="getQuestionOfThisSubject" asp-controller="Question" asp-route-Id="@item.Id">@item.Subject</a></li>
+    }
+    </ul>
+
+

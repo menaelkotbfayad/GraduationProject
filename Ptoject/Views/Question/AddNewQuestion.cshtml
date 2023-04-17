@@ -1,0 +1,390 @@
+﻿@using Ptoject.ViewModels;
+
+@model QuestionViewModel
+<style>
+    body {
+        background-color: aqua;
+    }
+</style>
+<div>
+
+    <div class="mb-3">
+        <label for="QuestionName" class="form-label">Question Name</label>
+        <input asp-for="Title" type="text" class="form-control w-50" id="QuestionName" aria-describedby="emailHelp">
+        <span asp-validation-for="Title"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="QuestionDegree" class="form-label">Question Degree</label>
+        <input type="text" asp-for="Degree" class="form-control w-50" id="QuestionDegree" aria-describedby="emailHelp">
+        <span asp-validation-for="Degree"></span>
+    </div>
+
+    <h3 class="form-label">Question Type</h3>
+    <select  asp-for="QuestionType" class="form-select w-50" aria-label="Default select example" id="TypeQuestion">
+        <option class="form-select w-50" value="1">True Or False</option>
+        <option class="form-select w-50" value="2">Multiple Choice</option>
+      
+    </select>
+
+    <div class="mb-3">
+        <h3 class="AddAnswers form-label">Add Answers</h3>
+        <label id="tr" class="w-50 mb-3 " style="display:none">True</label><input type="radio" id="ansTr" name="checkTrueOrFalse" style="margin-left:15px;display:none" /> <br/>
+        <label id="fl" class="w-50 mb-3 " style="display:none">False</label> <input type="radio" id="ansFl" name="checkTrueOrFalse" style="margin-left:15px;display:none" />
+        <input type="text" class="ans form-control w-50 mb-3" style="display:inline" aria-describedby="emailHelp" id="ans1"><input type="radio" id="check1" name="checkTrueOrFalse" style="margin-left:15px" />
+        <input type="text" class="ans form-control w-50 mb-3" style="display:inline" aria-describedby="emailHelp" id="ans2"><input type="radio" id="check2" name="checkTrueOrFalse" style="margin-left:15px" />
+        <input type="text" class="ans form-control w-50 mb-3" style="display:inline" aria-describedby="emailHelp" id="ans3"><input type="radio" id="check3" name="checkTrueOrFalse" style="margin-left:15px" />
+        <input  type="text" class="ans form-control w-50 mb-3" style="display:inline" aria-describedby="emailHelp" id="ans4" ><input type="radio" id="check4" name="checkTrueOrFalse" style="margin-left:15px" />
+        <span asp-validation-for="Answers"></span>
+    </div>
+
+    <select asp-for="SubId" class="form-select w-50" aria-label="Default select example" id="sub">
+
+        @foreach (var item in ViewBag.Subjects)
+        {
+
+
+            <option value =@item.Id > @item.Subject </option>
+        }
+
+       
+    </select>
+
+   
+    <button type="button" onclick="SendData()" class="btn btn-primary mt-3">Submit</button>
+</div>
+
+@section Scripts{
+
+
+    <script>
+
+        window.addEventListener('load', function () {
+            var questionName = document.querySelector("#QuestionName");
+            var QuestionDegree = document.querySelector("#QuestionDegree");
+            var AddAnswers = document.querySelector(".AddAnswers");
+
+            //  Radio Buttons
+            var check1 = document.querySelector("#check1");
+            var check2 = document.querySelector("#check2");
+            var check3 = document.querySelector("#check3");
+            var check4 = document.querySelector("#check4");
+            var check5 = document.querySelector("#tr");
+            var check6 = document.querySelector("#fl");
+
+            //   Answers Data
+            var ans1 = document.querySelector("#ans1");
+            var ans2 = document.querySelector("#ans2");
+            var ans3 = document.querySelector("#ans3");
+            var ans4 = document.querySelector("#ans4");
+            var ans5 = document.querySelector("#ansTr");
+            var ans6 = document.querySelector("#ansFl");
+
+            
+
+
+
+
+            questionName.focus();
+
+            //questionName.addEventListener("blur", function () {
+            //    if (!questionNameValid()) {
+
+            //         this.style.border = "2px solid red";
+            //         this.focus();
+            //         this.select();
+            //    } 
+            //    else {
+            //this.style.border = "2px solid green";
+            //        }
+            //     });
+
+            //QuestionDegree.addEventListener("blur", function () {
+            //    if (!QuestionDegreeValid()) {
+
+            //        this.style.border = "2px solid red";
+            //        this.focus();
+            //        this.select();
+            //    }
+            //    else {
+            //        this.style.border = "2px solid green";
+            //    }
+            //});
+
+
+            ans1.addEventListener("blur", function () {
+                if (!answerOneValid()) {
+
+                    //this.style.border = "2px solid red";
+                    this.focus();
+                    this.select();
+                }
+                else {
+                    this.style.border = "2px solid green";
+                }
+            });
+
+            ans2.addEventListener("blur", function () {
+                if (!answerTwoValid()) {
+
+                    //this.style.border = "2px solid red";
+                    this.focus();
+                    this.select();
+                }
+                else {
+                    this.style.border = "2px solid green";
+                }
+            });
+
+            ans3.addEventListener("blur", function () {
+                if (!answerThreeValid()) {
+
+                    //this.style.border = "2px solid red";
+                    this.focus();
+                    this.select();
+                }
+                else {
+                    this.style.border = "2px solid green";
+                }
+            });
+
+
+            ans4.addEventListener("blur", function () {
+                if (!answerFourValid()) {
+
+                    //this.style.border = "2px solid red";
+                    this.focus();
+                    this.select();
+                }
+                else {
+                    this.style.border = "2px solid green";
+                }
+            });
+
+           function questionNameValid() {
+                return questionName.value.match(/^[A-Za-z]+(\s?[A-Za-z])*$/);
+                 }
+
+            function QuestionDegreeValid() {
+                return QuestionDegree.value.match(/^[0-9]/);
+            }
+
+
+            function answerOneValid() {
+                return ans1.value.match(/[^\s]/);
+                 }
+
+            function answerTwoValid() {
+                return ans2.value.match(/[^\s]/);
+            }
+            function answerThreeValid() {
+                return ans3.value.match(/[^\s]/);
+            }
+
+            function answerFourValid() {
+                return ans4.value.match(/[^\s]/);
+            }
+
+
+            })//end load
+
+
+        var QuestionType = document.querySelector("#TypeQuestion");
+
+        //  Radio Buttons
+       
+
+        QuestionType.addEventListener("change",function(){
+            var check5 = document.querySelector("#tr");
+            var check6 = document.querySelector("#fl");
+
+            //   Answers Data
+           
+            var ans5 = document.querySelector("#ansTr");
+            var ans6 = document.querySelector("#ansFl");
+
+
+            if (QuestionType.value == 1){
+
+
+                ans1.style.display = "none"
+                check1.style.display = "none"
+
+                ans2.style.display = "none"
+                check2.style.display = "none"
+
+                ans3.style.display = "none"
+                check3.style.display = "none"
+
+                ans4.style.display = "none"
+                check4.style.display = "none"
+
+                ans5.style.display = "inline"
+                check5.style.display = "inline"
+
+                ans6.style.display = "inline"
+                check6.style.display = "inline"
+
+
+                QuestionType.disabled = true;
+           
+
+
+            }
+            else if (QuestionType.value == 2){
+
+
+                ans1.style.display = "inline"
+                check1.style.display = "inline"
+
+                ans2.style.display = "inline"
+                check2.style.display = "inline"
+
+                ans3.style.display = "inline"
+                check3.style.display = "inline"
+
+                ans4.style.display = "inline"
+                check4.style.display = "inline"
+
+                ans5.style.display = "none"
+                check5.style.display = "none"
+
+                ans6.style.display = "none"
+                check6.style.display = "none"
+
+               
+
+            }
+        })
+
+       
+        function checkTextBox(){
+            var check3 = document.querySelector("#check3");
+            var check4 = document.querySelector("#check4");
+            var ans3 = document.querySelector("#ans3");
+            var ans4 = document.querySelector("#ans4");
+
+            var QuestionType = document.querySelector("#TypeQuestion").value;
+            if (QuestionType == 2) {
+                ans3.style.display = "inline"
+                check3.style.display = "inline"
+
+                ans4.style.display = "inline"
+                check4.style.display = "inline"
+            }else{
+                ans3.style.display = "none"
+                check3.style.display = "none"
+
+                ans4.style.display = "none"
+                check4.style.display = "none"
+            }
+        }
+        function SendData(){
+            var answers = [];
+            var que = {
+                Title: "",
+                Degree: "",
+                SubId: 0,
+                QuestionType: 1,
+                Answers: []
+
+            }
+            //   Question Data
+            var questionName = document.querySelector("#QuestionName").value;
+            var QuestionDegree = document.querySelector("#QuestionDegree").value;
+            var sub = document.querySelector("#sub").value;
+            var QuestionType = document.querySelector("#TypeQuestion").value;
+
+            //  Radio Buttons
+            var radios = document.getElementsByName("checkTrueOrFalse");
+            var check1 = document.querySelector("#check1");
+            var check2 = document.querySelector("#check2");
+            var check3 = document.querySelector("#check3");
+            var check4 = document.querySelector("#check4");
+            var check5 = document.querySelector("#ansTr");
+            var check6 = document.querySelector("#ansFl");
+
+            //   Answers Data
+            var ans1 = document.querySelector("#ans1").value;
+            var ans2 = document.querySelector("#ans2").value;
+            var ans3 = document.querySelector("#ans3").value;
+            var ans4 = document.querySelector("#ans4").value;
+
+
+
+            //if (QuestionType == 2){
+            //    ans3.style.display = "inline"
+            //    check3.style.display = "inline"
+              
+            //    ans4.style.display = "inline"
+            //    check5.style.display = "inline"
+            //}
+
+           if(check1.checked){
+               answers.push({ Answer: ans1, IsTrue:true })
+               answers.push({ Answer: ans2, IsTrue:false })
+                answers.push({ Answer: ans3, IsTrue: false })
+                answers.push({ Answer: ans4, IsTrue: false })
+           }
+
+            if (check2.checked) {
+                answers.push({ Answer: ans1, IsTrue: false })
+                answers.push({ Answer: ans2, IsTrue: true })
+                answers.push({ Answer: ans3, IsTrue: false })
+                answers.push({ Answer: ans4, IsTrue: false })
+            }
+            if(check3.checked){
+               answers.push({ Answer: ans1, IsTrue:false })
+               answers.push({ Answer: ans2, IsTrue:false })
+                answers.push({ Answer: ans3, IsTrue: true })
+                answers.push({ Answer: ans4, IsTrue: false })
+           }
+           if(check4.checked){
+               answers.push({ Answer: ans1, IsTrue:false })
+               answers.push({ Answer: ans2, IsTrue:false })
+                answers.push({ Answer: ans3, IsTrue: false })
+                answers.push({ Answer: ans4, IsTrue: true })
+           }
+
+            if (check5.checked) {
+                answers.push({ Answer: "True", IsTrue: true })
+                answers.push({ Answer: "False", IsTrue: false })
+               
+            }
+            if (check6.checked) {
+                answers.push({ Answer: "True", IsTrue: false })
+                answers.push({ Answer: "False", IsTrue: true })
+
+            }
+         if(questionName != "" && QuestionDegree != "" ){
+
+            que.Title = questionName;
+            que.Degree = QuestionDegree;
+            que.SubId = sub;
+            que.Answers = answers
+            que.QuestionType = QuestionType
+         }else{
+             alert("please Question Name And Degree Question is required")
+             return false
+         }
+
+            if (answers.length > 0) {
+                
+                $.ajax({
+                    type: 'POST',
+                    url: '/Question/SaveNewQuestion',
+                    dataType: "json",
+                    data: {
+                        "question": que
+                    },success:function(){
+             
+                        window.location.href = "/Question/Index"
+                    }
+                });
+            }else
+                {
+                   alert("please check one answer true")
+                }
+        }
+    </script>
+}
